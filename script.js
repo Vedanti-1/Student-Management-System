@@ -1,4 +1,4 @@
-const API = "https://student-management-system-3bt3.onrender.com/api/students";
+const API = "https://student-management-api-scvo.onrender.com/api/students";
 
 const form = document.getElementById("studentForm");
 const studentList = document.getElementById("studentList");
