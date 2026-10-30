@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Student Management System</h1>
+    <p>Manage student records easily</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2 id="formTitle">Add Student</h2>
+
+      <form id="studentForm">
+        <input type="hidden" id="recordId">
+
+        <input
+          type="text"
+          id="studentId"
+          placeholder="Student ID (e.g. STU001)"
+          required
+        >
+
+        <input
+          type="text"
+          id="name"
+          placeholder="Full name"
+          required
+        >
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Email address"
+          required
+        >
+
+        <input
+          type="text"
+          id="department"
+          placeholder="Department"
+          required
+        >
+
+        <input
+          type="number"
+          id="semester"
+          placeholder="Semester (1-12)"
+          min="1"
+          max="12"
+          required
+        >
+
+        <input
+          type="tel"
+          id="contact"
+          placeholder="Contact number"
+        >
+
+        <button type="submit" id="saveButton">Add Student</button>
+        <button type="button" id="cancelButton" hidden>Cancel Edit</button>
+      </form>
+
+      <p id="message" role="status"></p>
+    </section>
+
+    <section class="card">
+      <h2>Student Records</h2>
+
+      <input
+        type="search"
+        id="search"
+        placeholder="Search by student ID, name, or email"
+      >
+
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Department</th>
+              <th>Semester</th>
+              <th>Contact</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentList">
+            <tr>
+              <td colspan="7">Loading students...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

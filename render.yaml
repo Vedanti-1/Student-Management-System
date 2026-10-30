@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: student-management-system
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: "*"
+      - key: MONGODB_URI
+        sync: false
