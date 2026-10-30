@@ -152,6 +152,53 @@
       <p id="message" role="status"></p>
     </section>
 
+    <!-- NEW CONTAINER: Quick Filter & Export Center -->
+    <section class="card tools-card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <span class="card-badge">Tools & Actions</span>
+          <h2>Quick Filter & Export Center</h2>
+        </div>
+        <p class="card-subtitle">Filter records by department or semester, export CSV, or print directory</p>
+      </div>
+
+      <div class="tools-grid">
+        <div class="tools-group">
+          <label for="filterDept">Filter Department</label>
+          <select id="filterDept">
+            <option value="">All Departments</option>
+          </select>
+        </div>
+
+        <div class="tools-group">
+          <label for="filterSem">Filter Semester</label>
+          <select id="filterSem">
+            <option value="">All Semesters</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+          </select>
+        </div>
+
+        <div class="tools-actions">
+          <button type="button" id="exportBtn" class="btn-secondary">
+            <span>📥</span> Export CSV
+          </button>
+          <button type="button" id="refreshBtn" class="btn-secondary">
+            <span>🔄</span> Refresh
+          </button>
+          <button type="button" id="printBtn" class="btn-secondary">
+            <span>🖨️</span> Print
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- Student Records Container -->
     <section class="card table-card">
       <div class="card-header table-header-flex">

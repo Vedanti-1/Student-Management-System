@@ -73,6 +73,22 @@ async function apiRequest(url, options = {}) {
   return result;
 }
 
+function updateDepartmentDropdown() {
+  const deptSelect = document.getElementById("filterDept");
+  if (!deptSelect) return;
+  const currentVal = deptSelect.value;
+  const uniqueDepts = Array.from(new Set(students.map(s => (s.department || "").trim()).filter(Boolean))).sort();
+
+  deptSelect.innerHTML = '<option value="">All Departments</option>';
+  uniqueDepts.forEach(dept => {
+    const opt = document.createElement("option");
+    opt.value = dept;
+    opt.textContent = dept;
+    if (dept === currentVal) opt.selected = true;
+    deptSelect.appendChild(opt);
+  });
+}
+
 function updateStats(filteredCount) {
   const totalStudentsEl = document.getElementById("totalStudentsCount");
   const totalDeptsEl = document.getElementById("totalDepartmentsCount");
@@ -102,6 +118,7 @@ function updateStats(filteredCount) {
 async function loadStudents() {
   try {
     students = await apiRequest(API);
+    updateDepartmentDropdown();
     renderStudents();
   } catch (error) {
     studentList.replaceChildren();
@@ -124,14 +141,21 @@ async function loadStudents() {
 function renderStudents() {
   const searchInput = document.getElementById("search");
   const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+  const filterDept = document.getElementById("filterDept") ? document.getElementById("filterDept").value.trim().toLowerCase() : "";
+  const filterSem = document.getElementById("filterSem") ? document.getElementById("filterSem").value.trim() : "";
 
   const filteredStudents = students.filter(student => {
-    return [
+    const matchesQuery = !query || [
       student.studentId,
       student.name,
       student.email,
       student.department
     ].some(value => String(value || "").toLowerCase().includes(query));
+
+    const matchesDept = !filterDept || (student.department || "").trim().toLowerCase() === filterDept;
+    const matchesSem = !filterSem || String(student.semester) === filterSem;
+
+    return matchesQuery && matchesDept && matchesSem;
   });
 
   updateStats(filteredStudents.length);
@@ -143,8 +167,8 @@ function renderStudents() {
 
     cell.colSpan = 7;
     cell.className = "loading-state";
-    cell.textContent = query
-      ? `No matching student records found for "${query}".`
+    cell.textContent = (query || filterDept || filterSem)
+      ? "No matching student records found for the applied filter."
       : "No student records found in database. Add a new student above.";
 
     row.appendChild(cell);
@@ -217,6 +241,33 @@ function renderStudents() {
     row.appendChild(actionsCell);
     studentList.appendChild(row);
   });
+}
+
+function exportToCSV() {
+  if (students.length === 0) {
+    showMessage("No student records available to export.", "error");
+    return;
+  }
+
+  const headers = ["Student ID", "Full Name", "Email", "Department", "Semester", "Contact"];
+  const rows = students.map(s => [
+    `"${(s.studentId || "").replace(/"/g, '""')}"`,
+    `"${(s.name || "").replace(/"/g, '""')}"`,
+    `"${(s.email || "").replace(/"/g, '""')}"`,
+    `"${(s.department || "").replace(/"/g, '""')}"`,
+    s.semester || "",
+    `"${(s.contact || "").replace(/"/g, '""')}"`
+  ]);
+
+  const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Student_Records_${new Date().toISOString().slice(0, 10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showMessage("Student records exported to CSV successfully.", "success");
 }
 
 form.addEventListener("submit", async event => {
@@ -326,9 +377,27 @@ document.getElementById("cancelButton").addEventListener("click", () => {
   showMessage("");
 });
 
+// Event Listeners for Filters & Actions
 const searchInput = document.getElementById("search");
-if (searchInput) {
-  searchInput.addEventListener("input", renderStudents);
-}
+if (searchInput) searchInput.addEventListener("input", renderStudents);
+
+const filterDeptEl = document.getElementById("filterDept");
+if (filterDeptEl) filterDeptEl.addEventListener("change", renderStudents);
+
+const filterSemEl = document.getElementById("filterSem");
+if (filterSemEl) filterSemEl.addEventListener("change", renderStudents);
+
+const exportBtn = document.getElementById("exportBtn");
+if (exportBtn) exportBtn.addEventListener("click", exportToCSV);
+
+const refreshBtn = document.getElementById("refreshBtn");
+if (refreshBtn) refreshBtn.addEventListener("click", async () => {
+  showMessage("Refreshing student database...");
+  await loadStudents();
+  showMessage("Student database refreshed successfully.", "success");
+});
+
+const printBtn = document.getElementById("printBtn");
+if (printBtn) printBtn.addEventListener("click", () => window.print());
 
 loadStudents();
