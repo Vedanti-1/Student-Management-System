@@ -1,6 +1,6 @@
 
 services:
-  # Primary Web Service (Node 1 - Oregon)
+  # Primary Web Service - Oregon
   - type: web
     name: student-management-system
     env: docker
@@ -17,7 +17,7 @@ services:
       - key: MONGODB_URI
         sync: false
 
-  # Replica 1 (Node 2 - Frankfurt)
+  # Replica 1 - Frankfurt
   - type: web
     name: student-management-system-replica
     env: docker
@@ -34,7 +34,7 @@ services:
       - key: MONGODB_URI
         sync: false
 
-  # Replica 2 (Node 3 - Ohio)
+  # Replica 2 - Ohio
   - type: web
     name: student-management-system-replica-2
     env: docker
@@ -51,7 +51,7 @@ services:
       - key: MONGODB_URI
         sync: false
 
-  # Replica 3 (Node 4 - Singapore)
+  # Replica 3 - Singapore
   - type: web
     name: student-management-system-replica-3
     env: docker
