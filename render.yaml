@@ -66,3 +66,20 @@ services:
         value: "*"
       - key: MONGODB_URI
         sync: false
+
+  # Scalable Copy Container 4 (Node 5 - Asia Pacific / Singapore)
+  - type: web
+    name: student-management-system-replica-4
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: singapore
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: "*"
+      - key: MONGODB_URI
+        sync: false
