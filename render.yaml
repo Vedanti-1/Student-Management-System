@@ -100,3 +100,20 @@ services:
         value: "*"
       - key: MONGODB_URI
         sync: false
+
+  # Scalable Copy Container 6 (Node 7 - Europe / Frankfurt)
+  - type: web
+    name: student-management-system-replica-6
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: frankfurt
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: "*"
+      - key: MONGODB_URI
+        sync: false
