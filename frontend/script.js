@@ -77,7 +77,8 @@ async function apiRequest(url, options = {}) {
     if (url.includes("student-management-api-scvo.onrender.com")) {
       const replicaUrls = [
         url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica.onrender.com"),
-        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-2.onrender.com")
+        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-2.onrender.com"),
+        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-3.onrender.com")
       ];
       for (const replicaUrl of replicaUrls) {
         console.warn("Retrying with scalable replica container:", replicaUrl);

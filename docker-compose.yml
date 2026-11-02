@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Load Balancer distributing requests across all 3 scalable containers
+  # Load Balancer distributing requests across all 4 scalable containers
   loadbalancer:
     image: nginx:alpine
     container_name: student-loadbalancer
@@ -13,6 +13,7 @@ services:
       - api-container-1
       - api-container-2
       - api-container-3
+      - api-container-4
     restart: always
 
   # Primary Container (Node 1)
@@ -47,6 +48,19 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: student-api-replica-2
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - MONGODB_URI=${MONGODB_URI}
+      - FRONTEND_URL=*
+    restart: always
+
+  # Scalable Copy Container 3 (Node 4)
+  api-container-4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: student-api-replica-3
     environment:
       - PORT=5000
       - NODE_ENV=production

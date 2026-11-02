@@ -1,6 +1,5 @@
-
 services:
-  # Primary Web Service - Oregon
+  # Primary Web Service Container (Node 1 - US West)
   - type: web
     name: student-management-system
     env: docker
@@ -11,13 +10,13 @@ services:
     autoDeploy: true
     envVars:
       - key: PORT
-        value: "5000"
+        value: 5000
       - key: FRONTEND_URL
         value: "*"
       - key: MONGODB_URI
         sync: false
 
-  # Replica 1 - Frankfurt
+  # Scalable Copy Container 1 (Node 2 - Europe)
   - type: web
     name: student-management-system-replica
     env: docker
@@ -28,13 +27,13 @@ services:
     autoDeploy: true
     envVars:
       - key: PORT
-        value: "5000"
+        value: 5000
       - key: FRONTEND_URL
         value: "*"
       - key: MONGODB_URI
         sync: false
 
-  # Replica 2 - Ohio
+  # Scalable Copy Container 2 (Node 3 - US East)
   - type: web
     name: student-management-system-replica-2
     env: docker
@@ -45,13 +44,13 @@ services:
     autoDeploy: true
     envVars:
       - key: PORT
-        value: "5000"
+        value: 5000
       - key: FRONTEND_URL
         value: "*"
       - key: MONGODB_URI
         sync: false
 
-  # Replica 3 - Singapore
+  # Scalable Copy Container 3 (Node 4 - Asia Pacific / Singapore)
   - type: web
     name: student-management-system-replica-3
     env: docker
@@ -62,7 +61,7 @@ services:
     autoDeploy: true
     envVars:
       - key: PORT
-        value: "5000"
+        value: 5000
       - key: FRONTEND_URL
         value: "*"
       - key: MONGODB_URI
