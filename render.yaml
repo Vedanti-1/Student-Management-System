@@ -1,10 +1,28 @@
 services:
+  # Primary Web Service Container
   - type: web
     name: student-management-system
     env: docker
     dockerfilePath: Dockerfile
     plan: free
     region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: "*"
+      - key: MONGODB_URI
+        sync: false
+
+  # Replica Copy Container for Scalability & High Availability (Redundancy)
+  - type: web
+    name: student-management-system-replica
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: frankfurt
     healthCheckPath: /health
     autoDeploy: true
     envVars:

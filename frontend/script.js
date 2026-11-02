@@ -54,23 +54,43 @@ function showMessage(text, type = "") {
 }
 
 async function apiRequest(url, options = {}) {
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {})
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      }
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        result.message || result.error || `Request failed (${response.status})`
+      );
     }
-  });
 
-  const result = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || result.error || `Request failed (${response.status})`
-    );
+    return result;
+  } catch (error) {
+    // Scalability & Failover: Try replica copy container if primary fails
+    if (url.includes("student-management-api-scvo.onrender.com")) {
+      const replicaUrl = url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica.onrender.com");
+      console.warn("Primary container unreachable. Retrying with replica copy container:", replicaUrl);
+      try {
+        const replicaRes = await fetch(replicaUrl, {
+          ...options,
+          headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          }
+        });
+        const replicaResult = await replicaRes.json().catch(() => ({}));
+        if (replicaRes.ok) return replicaResult;
+      } catch (_) {}
+    }
+    throw error;
   }
-
-  return result;
 }
 
 function updateDepartmentDropdown() {
