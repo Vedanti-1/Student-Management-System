@@ -73,21 +73,26 @@ async function apiRequest(url, options = {}) {
 
     return result;
   } catch (error) {
-    // Scalability & Failover: Try replica copy container if primary fails
+    // Scalability & Failover: Try replica copy containers if primary fails
     if (url.includes("student-management-api-scvo.onrender.com")) {
-      const replicaUrl = url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica.onrender.com");
-      console.warn("Primary container unreachable. Retrying with replica copy container:", replicaUrl);
-      try {
-        const replicaRes = await fetch(replicaUrl, {
-          ...options,
-          headers: {
-            "Content-Type": "application/json",
-            ...(options.headers || {})
-          }
-        });
-        const replicaResult = await replicaRes.json().catch(() => ({}));
-        if (replicaRes.ok) return replicaResult;
-      } catch (_) {}
+      const replicaUrls = [
+        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica.onrender.com"),
+        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-2.onrender.com")
+      ];
+      for (const replicaUrl of replicaUrls) {
+        console.warn("Retrying with scalable replica container:", replicaUrl);
+        try {
+          const replicaRes = await fetch(replicaUrl, {
+            ...options,
+            headers: {
+              "Content-Type": "application/json",
+              ...(options.headers || {})
+            }
+          });
+          const replicaResult = await replicaRes.json().catch(() => ({}));
+          if (replicaRes.ok) return replicaResult;
+        } catch (_) {}
+      }
     }
     throw error;
   }
