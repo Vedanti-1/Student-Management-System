@@ -213,16 +213,22 @@ app.delete("/api/students/:id", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
+  // Start HTTP listener immediately so Render health check probes always succeed
+  const server = app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+
   const mongoUri = process.env.MONGODB_URI;
 
   if (
     !mongoUri ||
     !/^mongodb(\+srv)?:\/\//.test(mongoUri.trim())
   ) {
-    console.error(
-      "MONGODB_URI is missing or invalid. Check Render Environment Variables."
+    console.warn(
+      "[Warning] MONGODB_URI is missing or invalid. Check Render Environment Variables or Environment Groups."
     );
-    process.exit(1);
+    console.warn("[Notice] Server listening and health check (/health) is ready.");
+    return server;
   }
 
   try {
@@ -231,15 +237,12 @@ async function startServer() {
     });
 
     console.log("Connected to MongoDB Atlas");
-
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running on port ${PORT}`);
-    });
   } catch (error) {
     // Do not log credentials or the connection string.
     console.error("Database connection failed:", error.message);
-    process.exit(1);
   }
+
+  return server;
 }
 
 if (require.main === module) {

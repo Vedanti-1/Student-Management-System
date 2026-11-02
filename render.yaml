@@ -1,3 +1,9 @@
+envVarGroups:
+  - name: student-management-shared-env
+    envVars:
+      - key: FRONTEND_URL
+        value: "*"
+
 services:
   # Primary Web Service Container (Node 1 - US West)
   - type: web
@@ -11,8 +17,7 @@ services:
     envVars:
       - key: PORT
         value: 5000
-      - key: FRONTEND_URL
-        value: "*"
+      - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
 
@@ -28,8 +33,7 @@ services:
     envVars:
       - key: PORT
         value: 5000
-      - key: FRONTEND_URL
-        value: "*"
+      - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
 
@@ -45,8 +49,7 @@ services:
     envVars:
       - key: PORT
         value: 5000
-      - key: FRONTEND_URL
-        value: "*"
+      - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
 
@@ -62,8 +65,7 @@ services:
     envVars:
       - key: PORT
         value: 5000
-      - key: FRONTEND_URL
-        value: "*"
+      - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
 
@@ -79,8 +81,7 @@ services:
     envVars:
       - key: PORT
         value: 5000
-      - key: FRONTEND_URL
-        value: "*"
+      - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
 
@@ -96,8 +97,7 @@ services:
     envVars:
       - key: PORT
         value: 5000
-      - key: FRONTEND_URL
-        value: "*"
+      - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
 
@@ -113,7 +113,22 @@ services:
     envVars:
       - key: PORT
         value: 5000
-      - key: FRONTEND_URL
-        value: "*"
+      - fromGroup: student-management-shared-env
+      - key: MONGODB_URI
+        sync: false
+
+  # Scalable Copy Container 7 (Node 8 - US East / Ohio)
+  - type: web
+    name: student-management-system-replica-7
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: ohio
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false

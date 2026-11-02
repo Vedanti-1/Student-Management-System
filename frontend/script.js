@@ -81,7 +81,8 @@ async function apiRequest(url, options = {}) {
         url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-3.onrender.com"),
         url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-4.onrender.com"),
         url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-5.onrender.com"),
-        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-6.onrender.com")
+        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-6.onrender.com"),
+        url.replace("student-management-api-scvo.onrender.com", "student-management-system-replica-7.onrender.com")
       ];
       for (const replicaUrl of replicaUrls) {
         console.warn("Retrying with scalable replica container:", replicaUrl);
