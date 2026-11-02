@@ -17,6 +17,8 @@ services:
       - api-container-5
       - api-container-6
       - api-container-7
+      - api-container-8
+      - api-container-9
     restart: always
 
   # Primary Container (Node 1)
@@ -103,6 +105,32 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: student-api-replica-6
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - MONGODB_URI=${MONGODB_URI}
+      - FRONTEND_URL=*
+    restart: always
+
+  # Scalable Copy Container 7 (Node 8)
+  api-container-8:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: student-api-replica-7
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - MONGODB_URI=${MONGODB_URI}
+      - FRONTEND_URL=*
+    restart: always
+
+  # Scalable Copy Container 8 (Node 9)
+  api-container-9:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: student-api-replica-8
     environment:
       - PORT=5000
       - NODE_ENV=production
