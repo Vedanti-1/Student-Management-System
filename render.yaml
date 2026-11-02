@@ -83,3 +83,20 @@ services:
         value: "*"
       - key: MONGODB_URI
         sync: false
+
+  # Scalable Copy Container 5 (Node 6 - US East / Virginia)
+  - type: web
+    name: student-management-system-replica-5
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: virginia
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: "*"
+      - key: MONGODB_URI
+        sync: false
