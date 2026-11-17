@@ -148,3 +148,19 @@ services:
       - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
+
+  # Scalable Copy Container 9 (Node 10 - US East / Virginia)
+  - type: web
+    name: student-management-system-replica-9
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: virginia
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - fromGroup: student-management-shared-env
+      - key: MONGODB_URI
+        sync: false
