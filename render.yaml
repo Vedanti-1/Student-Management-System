@@ -164,3 +164,19 @@ services:
       - fromGroup: student-management-shared-env
       - key: MONGODB_URI
         sync: false
+
+  # Scalable Copy Container - rashi-khadse (Node 11 - US West / Oregon)
+  - type: web
+    name: rashi-khadse
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - fromGroup: student-management-shared-env
+      - key: MONGODB_URI
+        sync: false
